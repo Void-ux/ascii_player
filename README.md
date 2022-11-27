@@ -14,4 +14,4 @@ This project is licensed under the MIT license; see [LICENSE file](https://githu
 
 ## Thanks
 
-A massive thank you to Bast#0006 at the [Python Discord](https://discord.gg/python) for helping with the virtual console control sequences on Windows
+A massive thank you to Bast#0006 at the [Python Discord](https://discord.gg/python) for helping with the console virtual terminal sequences on Windows
