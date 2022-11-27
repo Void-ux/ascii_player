@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "ascii_video"
+version = "0.1.0"
+description = "Converts a video into an ASCII text representation of each frame and plays it at a given frame rate"
+license = "MIT"
+authors = ["Dan <the.void.altacc@gmail.com>"]
+
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+]
+[tool.poetry.dependencies]
+python = "^3.10"
+opencv-python = "^4.6.0"
+numpy = "^1.23.5"
+Cython = "^0.29.32"
+
+[tool.poetry.dev-dependencies]
+
+[tool.black]
+line-length = 125
+skip-string-normalization = true
+
+[tool.pyright]
+venvPath = "C:\\Users\\MS1\\AppData\\Local\\pypoetry\\Cache\\virtualenvs"
+venv = "ascii-video-vKYW85Dq-py3.10"
+pythonVersion = "3.10"
+typeCheckingVersion = "strict"
+reportUnusedImport = "warning"
+reportUnnecessaryTypeIgnoreComment = "warning"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
