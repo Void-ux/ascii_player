@@ -1,10 +1,18 @@
 import os
 
 if os.name != 'nt':
-    raise ImportError("This isn't Windows!")
+    __all__ = ()
+
+    def enable_virtual_processing():
+        raise ImportError("This isn't Windows!")
+
+    def change_console_font_size():
+        raise ImportError("This isn't Windows!")
 else:
     import ctypes
     from ctypes import wintypes
+
+    __all__ = ('enable_virtual_processing', 'change_console_font_size')
 
     STD_OUTPUT_HANDLE = -11
     COORD = wintypes._COORD
