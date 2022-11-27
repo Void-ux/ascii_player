@@ -23,7 +23,7 @@ def sleep_until(target: datetime.datetime) -> None:
 
 
 def convert_to_greyscale(image: np.ndarray) -> np.ndarray:
-    return cv2.cvtColor(image, 0, cv2.COLOR_RGB2GRAY)
+    return cv2.cvtColor(image, 0, cv2.COLOR_RGB2GRAY)  # type: ignore
 
 
 def load_frame(frame: np.ndarray, columns: int, rows: int) -> str:
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     # Windows' command prompt (cmd) does support ANSI escape sequences
     # however, this is only for itself, and not programs running on it,
     # thus, we'll need to enable it ourselves.
-    system_has_native_ansi = not on_windows or enable_virtual_processing() # pyright: ignore reportUndefinedVariable
+    system_has_native_ansi = not on_windows or enable_virtual_processing() # pyright: ignore reportUndefinedVariable doesn't understand this narrowing
 
     if system_has_native_ansi is False:
         raise OSError('Native ANSI is not enabled, which is required for clearing the terminal.')

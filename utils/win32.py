@@ -1,13 +1,11 @@
-try:
-    from msvcrt import get_osfhandle
-except ImportError:
-    def get_osfhandle(_):
-        raise OSError("This isn't windows!")
+import os
+
+if os.name != 'nt':
+    raise ImportError("This isn't Windows!")
 else:
     import ctypes
     from ctypes import wintypes
 
-    ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004
     STD_OUTPUT_HANDLE = -11
     COORD = wintypes._COORD
 
