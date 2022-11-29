@@ -1,13 +1,19 @@
-try:
-    from msvcrt import get_osfhandle
-except ImportError:
-    def get_osfhandle(_):
-        raise OSError("This isn't windows!")
+import os
+
+if os.name != 'nt':
+    __all__ = ()
+
+    def enable_virtual_processing():
+        raise ImportError("This isn't Windows!")
+
+    def change_console_font_size():
+        raise ImportError("This isn't Windows!")
 else:
     import ctypes
     from ctypes import wintypes
 
-    ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004
+    __all__ = ('enable_virtual_processing', 'change_console_font_size')
+
     STD_OUTPUT_HANDLE = -11
     COORD = wintypes._COORD
 
