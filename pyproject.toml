@@ -26,10 +26,8 @@ line-length = 125
 skip-string-normalization = true
 
 [tool.pyright]
-venvPath = "C:\\Users\\MS1\\AppData\\Local\\pypoetry\\Cache\\virtualenvs"
-venv = "ascii-video-vKYW85Dq-py3.10"
 pythonVersion = "3.10"
-typeCheckingVersion = "strict"
+typeCheckingVersion = "basic"
 reportUnusedImport = "warning"
 reportUnnecessaryTypeIgnoreComment = "warning"
 
