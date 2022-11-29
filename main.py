@@ -20,6 +20,7 @@ parser = argparse.ArgumentParser(
     description='Converts a video into an ASCII representation, frame-by-frame'
 )
 parser.add_argument('-v', '--video', required=True, help='An absolute path to the video to convert')
+parser.add_argument('-fps', '--frame_rate', default=None, type=int, help='The desired frame rate, consider each frame is getting rendered in the delay between each frame.')
 args = parser.parse_args()
 
 
@@ -35,62 +36,40 @@ def convert_to_greyscale(image: np.ndarray) -> np.ndarray:
     return cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
 
-def load_frame(frame: np.ndarray) -> str:
+def render_frame(frame: np.ndarray) -> None:
+    frame = convert_to_greyscale(frame)
     frame = cv2.resize(frame, (TERMINAL_ROWS, TERMINAL_COLUMNS), interpolation=cv2.INTER_LINEAR)
 
     frame //= 5  # type: ignore
-    final_display = ASCII_CHARS[frame]
+    content = ASCII_CHARS[frame]
+    final_display = '\n'.join(''.join(row) for row in content)
 
-    return '\n'.join(''.join(row) for row in final_display)
-
-
-def display_frames(final_display: list[str], frame_rate: int) -> None:
-    time_between_frames = 1 / frame_rate
-
-    # this ensures each frame is printed at the desired frame rate
-    target_frame_display = datetime.datetime.now()
-
-    for frame in final_display:
-        print('\x1b[2J')
-        print(frame)
-
-        target_frame_display += datetime.timedelta(seconds=time_between_frames)
-        sleep_until(target_frame_display)
+    print('\x1b[2J', final_display)
 
 
 def main():
     video = cv2.VideoCapture(str(Path(__file__).parent / args.video))
 
-    frame_rate = int(video.get(cv2.CAP_PROP_FPS))
+    frame_rate = args.frame_rate or int(video.get(cv2.CAP_PROP_FPS))
     total_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+    assert total_frames > 0, "There needs to be at least one frame in your video!"
 
     print(f'There are {total_frames} frames in this video.')
+    time.sleep(3)
 
-    frames: list[np.ndarray] = []
+    # this ensures each frame is printed at the desired frame rate
+    time_between_frames = 1 / frame_rate
+    target_frame_display = datetime.datetime.now()
+    more_frames = True
 
-    start = time.perf_counter()
-    for frame_num in range(total_frames):
-        print(f'Progress : Converting frame {frame_num + 1} of {total_frames} to greyscale', end='\r')
-
+    while more_frames:
         # more_frames represents whether or not a valid frame has actually been retrieved
         # i.e. `False`` is returned when frame 322 is reached of a 321 frame video
         more_frames, frame = video.read()
-        assert more_frames  # this should never raise an AssertionError
+        render_frame(frame)
 
-        frames.append(convert_to_greyscale(frame))
-    end = time.perf_counter()
-
-    print(f'Progress : Converting frame {frame_num + 1} of {total_frames} to greyscale (took {end-start:.2f} seconds)')  # type: ignore
-
-    final_display: list[str] = []
-    start = time.perf_counter()
-    for frame_num, frame in enumerate(frames, start=1):
-        print(f'Progress : Loading frame {frame_num} of {total_frames}', end='\r')
-        final_display.append(load_frame(frame))
-    end = time.perf_counter()
-    print(f'Progress : Loading frame {frame_num} of {total_frames} (took {end-start:.2f} seconds)')  # type: ignore
-
-    display_frames(final_display, frame_rate)
+        target_frame_display += datetime.timedelta(seconds=time_between_frames)
+        sleep_until(target_frame_display)
 
 
 if __name__ == '__main__':
