@@ -98,7 +98,7 @@ if __name__ == '__main__':
     # Windows' command prompt (cmd) does support ANSI escape sequences
     # however, this is only for itself, and not programs running on it,
     # thus, we'll need to enable it ourselves.
-    system_has_native_ansi = not on_windows or enable_virtual_processing()  # pyright: ignore reportUndefinedVariable doesn't understand this narrowing
+    system_has_native_ansi = not on_windows or enable_virtual_processing()
 
     if system_has_native_ansi is False:
         raise OSError('Native ANSI is not enabled, which is required for clearing the terminal.')
